@@ -2,6 +2,11 @@
 //% color="#7C9BDE" icon="\uf187"
 namespace buftex {
 
+    function bitcalc(nv: number, bl: number ) {
+        const sv = bl ** 2 * 4, iv = Math.ceil(Math.log(nv) / Math.log(sv))
+        return iv 
+    }
+
     /**
      * convert your text to buffer string
      * @param text input to encode
@@ -15,11 +20,11 @@ namespace buftex {
         let numarrv: number[] = []
         for (let i = 0; i < txtv.length; i++) {
             let numv = txtv.charCodeAt(i)
-            const bytelen = Math.ceil(Math.log(numv + 1 * 2) / 8)
+            const bytelen = bitcalc(numv, 8), bytemax = 8 ** 2 * 4
             numarrv.push(bytelen)
             for (let j = 0; j < bytelen; j++) {
-                numarrv.push(numv % 256)
-                numv = Math.floor(numv / 256)
+                numarrv.push(numv % bytemax)
+                numv = Math.floor(numv / bytemax)
             }
         }
         numarrv.push(0)
@@ -38,12 +43,12 @@ namespace buftex {
     //% weight=5
     export function decode(bufv: Buffer) {
         let strtxt: string = ""
-        let bytelen = bufv[0], bytesum = 0, byteval = 0
+        let bytelen = bufv[0], bytesum = 0, byteval = 0, bytemax = 8 ** 2 * 4
         for (let i = 1; i < bufv.length; i++) {
             if (bytelen > 0) {
                 if (bytesum > 0) byteval += bufv[i] * bytesum
                 else byteval += bufv[i]
-                bytesum = (bytesum > 0) ? bytesum * 256 : 256
+                bytesum = (bytesum > 0) ? bytesum * bytemax : bytemax
                 bytelen--
             } else {
                 bytelen = bufv[i]
