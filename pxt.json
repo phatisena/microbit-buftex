@@ -1,5 +1,6 @@
 {
     "name": "microbit-buftex",
+    "version": "0.0.1",
     "description": "buffer text encoder for microbit",
     "dependencies": {
         "core": "*",
